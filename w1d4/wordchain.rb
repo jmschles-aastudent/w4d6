@@ -1,3 +1,5 @@
+require 'set'
+
 class WordChainer
 
 	attr_reader :dictionary
@@ -15,7 +17,7 @@ class WordChainer
 	end
 
 	def adjacent_words(word, candidates)
-		adjacent_words = []
+		adjacent_words = Set.new
 
 		word.split("").each_index do |i|
 			('a'..'z').each do |letter|
@@ -31,9 +33,10 @@ class WordChainer
 	def find_chain(start, target)
 
 		candidates = @dictionary.select { |word| word.length == start.length }
+		candidates = Set.new(candidates) - [start]
 
-		current_words = [start]
-		new_words = []
+		current_words = Set.new([start])
+		new_words = Set.new
 		visited_words = { start => nil }
 
 		until visited_words.has_key?(target) || current_words.empty?
