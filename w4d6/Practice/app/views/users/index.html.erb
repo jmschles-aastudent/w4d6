@@ -1,0 +1,29 @@
+<% flash[:errors].try(:each) do |error| %>
+	<%= error %>
+<% end %>
+
+<h2>All Users</h2>
+
+<ul>
+	<% @users.each do |user| %>
+		<li><%= link_to user.username, user_url(user) %></li>
+		<% unless user == @current_user %>
+			<% if @current_user.followed_users.include?(user) %>
+				<form action="<%= following_url(Following.where( :follower_id => @current_user.id, :followed_id => user.id ).first.id ) %>" method="post">
+					<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+					<input type="hidden" name="_method" value="delete">
+
+					<input type="submit" value="Unfollow">
+				</form>
+			<% else %>
+				<form action="<%= followings_url %>" method="post">
+					<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+					<input type="hidden" name="following[follower_id]" value="<%= @current_user.id %>">
+					<input type="hidden" name="following[followed_id]" value="<%= user.id %>">
+
+					<input type="submit" value="Follow">
+				</form>
+			<% end %>
+		<% end %>
+	<% end %>
+</ul>

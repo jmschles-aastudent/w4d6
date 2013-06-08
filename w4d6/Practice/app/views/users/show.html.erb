@@ -1,0 +1,19 @@
+<% flash[:errors].try(:each) do |error| %>
+	<%= error %>
+<% end %>
+
+<h2><%= @user.username %></h2>
+
+<h4>Following:</h4>
+<ul>
+<% @user.followed_users.each do |fu| %>
+	<li><%= fu.username %></li>
+<% end %>
+</ul>
+
+<h4>Followers:</h4>
+<ul>
+<% @user.followers.each do |follower| %>
+	<li><%= follower.username %></li>
+<% end %>
+</ul>
